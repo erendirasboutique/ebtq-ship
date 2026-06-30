@@ -237,14 +237,14 @@ export default function CustomersDashboard({ initialCustomers = [] }) {
         ))}
       </div>
 
-      {form && (
-        <div className="modal-backdrop" onMouseDown={(e) => e.stopPropagation()}>
-          <form
-  className="modal"
-  onSubmit={saveCustomer}
-  onMouseDown={(e) => e.stopPropagation()}
-  onClick={(e) => e.stopPropagation()}
->
+   {form && (
+  <div className="modal-backdrop customer-modal-lock">
+    <form
+      className="modal"
+      onSubmit={saveCustomer}
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
             <button type="button" className="close" onClick={closeModal}>×</button>
 
             <h2>{editingId === 'new' ? 'Add Customer' : 'Edit Customer'}</h2>
