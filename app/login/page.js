@@ -5,8 +5,7 @@ import { supabaseClient } from '@/lib/supabaseClient';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function LoginPage() {
-  const [message, setMessage] = useState('Sign in with your Erendira's Boutique Google account.');
-
+const [message, setMessage] = useState("Sign in with your Erendira's Boutique Google account.");
   useEffect(() => {
     let tries = 0;
 
