@@ -18,7 +18,7 @@ export async function POST(req) {
   if (!isShippingAuthenticated(c)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const customer = await req.json();
-    const saved = await upsertCustomer(customer);
+    const saved = await upsertCustomers([customer])
     return NextResponse.json({ customer: saved, customers: await selectCustomers() });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
