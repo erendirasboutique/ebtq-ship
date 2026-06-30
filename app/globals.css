@@ -14,3 +14,27 @@ html.dark{--cream:#151310;--paper:#211d18;--soft:#2a241d;--soft2:#342b22;--line:
 .customer-modal-lock .modal{
   pointer-events:auto;
 }
+.modal-backdrop{
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(32,24,58,.42) !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 18px !important;
+  pointer-events: auto !important;
+}
+
+.modal{
+  position: relative !important;
+  z-index: 10000 !important;
+  pointer-events: auto !important;
+}
+
+.page:has(.modal-backdrop) .customer-grid,
+.page:has(.modal-backdrop) .customer,
+.page:has(.modal-backdrop) .toolbar,
+.page:has(.modal-backdrop) .nav,
+.page:has(.modal-backdrop) .topbar{
+  pointer-events: none !important;
+}
