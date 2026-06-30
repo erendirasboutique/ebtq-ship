@@ -1,0 +1,3 @@
+import { NextResponse } from 'next/server';import { cookies } from 'next/headers';import { isShippingAuthenticated } from '@/lib/auth';import { upsertOrder, selectOrders } from '@/lib/supabaseRest';
+export async function GET(){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});return NextResponse.json({orders:await selectOrders()})}
+export async function POST(req){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});try{const order=await req.json();const saved=await upsertOrder(order);const orders=await selectOrders();return NextResponse.json({ok:true,order:saved[0],orders})}catch(e){return NextResponse.json({error:e.message},{status:500})}}

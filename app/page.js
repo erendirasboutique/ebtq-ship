@@ -1,1 +1,3 @@
-import { redirect } from 'next/navigation';export default function Home(){redirect('/shipping')}
+import { cookies } from 'next/headers';import { redirect } from 'next/navigation';import Shell from '@/components/Shell';import Dashboard from '@/components/Dashboard';import { isShippingAuthenticated } from '@/lib/auth';import { selectOrders, selectCustomers } from '@/lib/supabaseRest';
+export const dynamic='force-dynamic';
+export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/login');let orders=[],customers=[],error='';try{[orders,customers]=await Promise.all([selectOrders(),selectCustomers()])}catch(e){error=e.message}return <Shell><Dashboard orders={orders} customers={customers} loadError={error}/></Shell>}

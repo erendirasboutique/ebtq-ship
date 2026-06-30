@@ -1,0 +1,3 @@
+import { cookies } from 'next/headers';import { redirect } from 'next/navigation';import Shell from '@/components/Shell';import Customers from '@/components/Customers';import { isShippingAuthenticated } from '@/lib/auth';import { selectCustomers, selectOrders } from '@/lib/supabaseRest';
+export const dynamic='force-dynamic';
+export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/login');let customers=[],orders=[],error='';try{[customers,orders]=await Promise.all([selectCustomers(),selectOrders()])}catch(e){error=e.message}return <Shell><Customers initialCustomers={customers} orders={orders} loadError={error}/></Shell>}
