@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata = {
   title: "Erendira's Boutique Shipping Portal",
   description: "Internal shipping portal for Erendira's Boutique",
-  icons: { icon: '/icon.png', apple: '/icon.png' }
+  icons: { icon: '/favicon.png', apple: '/favicon.png' }
 };
 
 export const viewport = {
