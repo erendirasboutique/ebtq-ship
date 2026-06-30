@@ -156,3 +156,7 @@ create unique index if not exists staff_users_email_idx on staff_users(email);
 -- insert into staff_users (email, name, role)
 -- values ('you@example.com', 'Your Name', 'admin')
 -- on conflict (email) do update set name = excluded.name, role = excluded.role;
+
+-- v10 refund/cancel label support
+alter table shipping_orders add column if not exists refund_status text;
+alter table shipping_orders add column if not exists refunded_at timestamptz;
