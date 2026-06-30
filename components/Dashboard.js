@@ -18,14 +18,14 @@ export default function Dashboard({ orders = [], customers = [] }) {
     <>
       <section className="hero boutiqueHero">
         <div>
-          <p className="eyebrow">Boutique shipping command center</p>
-          <h2>Manage labels with the same Erendira&apos;s Boutique look.</h2>
-          <p className="muted">Create 4×6 labels, manage customers, review shipments, and print batches without the old busy gradients.</p>
+          <p className="eyebrow">Shipping Portal</p>
+          <h2>Shipping Dashboard</h2>
         </div>
         <div className="heroPanel">
           <span>Today</span>
+    
           <b>{todayOrders.length}</b>
-          <small>shipments created</small>
+          <small>Shipments Created</small>
         </div>
       </section>
 
@@ -44,8 +44,8 @@ export default function Dashboard({ orders = [], customers = [] }) {
           <h2>Quick Actions</h2>
           <div className="quickGrid actionTiles">
             <Link className="mini-card actionTile primaryTile" href="/create-label"><b>Create a label</b><span>Search customer, choose rate, buy 4×6 PDF</span></Link>
-            <Link className="mini-card actionTile" href="/batch-print"><b>Batch print</b><span>Combine selected labels into one PDF</span></Link>
-            <Link className="mini-card actionTile" href="/customers"><b>Customers</b><span>Import CSV, edit addresses, view contact info</span></Link>
+            <Link className="mini-card actionTile" href="/batch-print"><b>Batch Print</b><span>Combine selected labels into one PDF</span></Link>
+            <Link className="mini-card actionTile" href="/customers"><b>Customers</b><span>Edit addresses, View contact info</span></Link>
             <Link className="mini-card actionTile" href="/orders"><b>Orders</b><span>Review full shipment details and tracking</span></Link>
           </div>
         </section>
@@ -55,6 +55,7 @@ export default function Dashboard({ orders = [], customers = [] }) {
             <div>
               <p className="eyebrow">Latest activity</p>
               <h2>Recent Shipments</h2>
+    
             </div>
             <Link className="btn ghost" href="/orders">View all</Link>
           </div>
