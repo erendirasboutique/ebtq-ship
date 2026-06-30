@@ -1,46 +1,56 @@
-# Erendira's Boutique EasyPost Shipping Studio
+# Erendira's Boutique EasyPost Shipping Studio v2
 
-A clean, branded Next.js shipping portal powered by EasyPost.
+This version adds:
 
-## Vercel Environment Variables
-
-Required:
-
-```env
-EASYPOST_API_KEY=EZTK_or_EZAK_key_here
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-SHIPPING_PORTAL_PASSWORD=your_login_password
-SHIPPING_SESSION_SECRET=long_random_secret
-```
-
-Required ship-from address:
-
-```env
-SHIP_FROM_NAME=Erendira's Boutique
-SHIP_FROM_STREET1=your_shipping_street
-SHIP_FROM_STREET2=
-SHIP_FROM_CITY=your_city
-SHIP_FROM_STATE=CA
-SHIP_FROM_ZIP=your_zip
-SHIP_FROM_PHONE=your_phone
-SHIP_FROM_EMAIL=your_email
-```
+- CSV customer import for Ship.com customer exports
+- Search customer while creating a label
+- Manual new customer creation
+- Editable customer addresses
+- Customer profile modal with portal order history
+- Better order popup UI
+- Batch label PDF printing from selected purchased labels
+- Default package dimensions: 13 × 10 × 10
+- Hardcoded ship-from address: Erendira's Boutique, 17121 Hawthorne Ave, Fontana, CA 92335
 
 ## Supabase
 
 Run `sql/setup.sql` in Supabase SQL Editor.
 
-## Usage
+## Vercel environment variables
 
-1. Log in at `/shipping/login`.
-2. Go to Create Label.
-3. Enter customer + package information.
-4. Save Order.
-5. Get Rates.
-6. Buy Label.
-7. Print the label from Orders.
+Required:
 
-## Notes
+```env
+EASYPOST_API_KEY=EZTK_or_EZAK_key
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SHIPPING_PORTAL_PASSWORD=your_login_password
+SHIPPING_SESSION_SECRET=long_random_32_plus_character_secret
+```
 
-Use EasyPost test key first. Labels purchased with a live key can charge postage.
+Optional:
+
+```env
+SHIP_FROM_PHONE=
+SHIP_FROM_EMAIL=
+```
+
+## Customer CSV import
+
+Do not upload your customer CSV to GitHub. Log into the portal, go to Customers, and click **Import CSV**.
+
+Supported CSV columns include:
+
+- First
+- Last
+- Email
+- Phone
+- Address1
+- Address2
+- City
+- State
+- Zip
+- OrderCount
+- Spend
+- RewardPoints
+
