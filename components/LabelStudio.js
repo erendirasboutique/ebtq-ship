@@ -89,5 +89,29 @@ export default function LabelStudio({initialCustomers=[]}){
     }
   }
 
-  return <div className="layout"><section className="card glass"><h2>Create Label</h2><p className="muted">Search a customer or enter a new one manually.</p>{msg&&<div className="notice">{msg}</div>}<label>Search Customers<input value={q} onChange={e=>setQ(e.target.value)} placeholder="Name, phone, email, zip..."/></label><div className="list" style={{margin:'12px 0'}}>{matches.map(c=><button key={c.id} className="customer" onClick={()=>useCustomer(c)}><b>{c.customer_name}</b><br/><span className="small">{c.customer_address}</span></button>)}</div><div className="form"><label>Customer Name<input value={order.customer_name||''} onChange={e=>set('customer_name',e.target.value)}/></label><label>Phone<input value={order.customer_phone||''} onChange={e=>set('customer_phone',e.target.value)}/></label><label className="wide">Email<input value={order.customer_email||''} onChange={e=>set('customer_email',e.target.value)}/></label><label className="wide">Address 1<input value={order.address_line1||''} onChange={e=>set('address_line1',e.target.value)}/></label><label className="wide">Address 2<input value={order.address_line2||''} onChange={e=>set('address_line2',e.target.value)}/></label><label>City<input value={order.city||''} onChange={e=>set('city',e.target.value)}/></label><label>State<input value={order.state||''} onChange={e=>set('state',e.target.value)}/></label><label>ZIP<input value={order.zip||''} onChange={e=>set('zip',e.target.value)}/></label><label>Country<input value={order.country||'US'} onChange={e=>set('country',e.target.value)}/></label><label>Length<input type="number" value={order.parcel_length||13} onChange={e=>set('parcel_length',e.target.value)}/></label><label>Width<input type="number" value={order.parcel_width||10} onChange={e=>set('parcel_width',e.target.value)}/></label><label>Height<input type="number" value={order.parcel_height||10} onChange={e=>set('parcel_height',e.target.value)}/></label><label>Lbs<input type="number" value={order.parcel_weight_lb||0} onChange={e=>set('parcel_weight_lb',e.target.value)}/></label><label>Oz<input type="number" value={order.parcel_weight_oz||0} onChange={e=>set('parcel_weight_oz',e.target.value)}/></label><label className="wide"><span><input type="checkbox" checked={!!order.signature_required} onChange={e=>set('signature_required',e.target.checked)} style={{width:'auto'}}/> Signature confirmation</span></label><label className="wide">Notes<textarea value={order.notes||''} onChange={e=>set('notes',e.target.value)} rows="3"/></label></div><div className="actions" style={{marginTop:14}}><button className="btn ghost" onClick={save} disabled={busy}>Save Order</button><button className="btn primary" onClick={getRates} disabled={busy}>Get Rates</button></div></section><section className="card glass"><h2>Rates</h2><p className="muted">Labels purchase as 4×6 PDF.</p><div className="list">{!rates.length&&<div className="empty">Rates will appear here.</div>}{rates.map(r=><div className="rate" key={r.id}><div className="order-head"><div><h3>{r.carrier} {r.service}</h3><p className="muted">{r.delivery_days?`${r.delivery_days} day(s)`:''}</p></div><b>${r.rate}</b></div><button className="btn green" onClick={()=>buy(r)} disabled={busy}>Purchase Label</button></div>)}</div></section></div>
-}
+<div className="form">
+  <div className="card mini">
+    <h3>Customer</h3>
+    {/* customer search, name, phone, email */}
+  </div>
+
+  <div className="card mini">
+    <h3>Shipping Address</h3>
+    {/* address1, address2, city, state, zip */}
+  </div>
+
+  <div className="card mini">
+    <h3>Package Weight</h3>
+    {/* lbs, oz */}
+  </div>
+
+  <div className="card mini">
+    <h3>Package Dimensions</h3>
+    {/* length, width, height */}
+  </div>
+
+  <div className="card mini">
+    <h3>Shipping Options</h3>
+    {/* signature checkbox, notes */}
+  </div>
+</div>}
