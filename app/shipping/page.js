@@ -1,8 +1,3 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import AppShell from '@/components/AppShell';
-import Dashboard from '@/components/Dashboard';
-import { isShippingAuthenticated } from '@/lib/auth';
-import { selectOrders } from '@/lib/supabaseRest';
+import { cookies } from 'next/headers';import { redirect } from 'next/navigation';import { isShippingAuthenticated } from '@/lib/auth';import { selectOrders } from '@/lib/supabaseRest';import TopNav from '@/components/TopNav';import OrderList from '@/components/OrderList';
 export const dynamic='force-dynamic';
-export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/shipping/login');let orders=[];let error='';try{orders=await selectOrders()}catch(e){error=e.message}return <AppShell title="Shipping Studio"><>{error&&<div className="notice error">{error}</div>}<Dashboard orders={orders}/></></AppShell>}
+export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/shipping/login');let orders=[],error='';try{orders=await selectOrders()}catch(e){error=e.message}const shipped=orders.filter(o=>o.tracking_number).length;return <main className="app-bg"><div className="flower f1">✿</div><div className="flower f2">✿</div><div className="flower f3">✿</div><div className="container"><TopNav/>{error&&<div className="notice error">{error}</div>}<section className="grid"><div className="stat glass"><b>{orders.length}</b><span>Total Orders</span></div><div className="stat glass"><b>{shipped}</b><span>Labels Bought</span></div><div className="stat glass"><b>{orders.filter(o=>!o.notification_sent).length}</b><span>Notifications</span></div><div className="stat glass"><b>{new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b><span>Today</span></div></section><section className="card"><h2>Recent Orders</h2><OrderList initialOrders={orders}/></section></div></main>}

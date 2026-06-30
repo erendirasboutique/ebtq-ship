@@ -1,42 +1,46 @@
-# Erendira's Boutique Ship.com Shipping Studio v3
+# Erendira's Boutique EasyPost Shipping Studio
 
-A clean, reorganized internal shipping portal branded for Erendira's Boutique.
-
-## Main Pages
-- `/shipping` Dashboard
-- `/shipping/create` Create Label
-- `/shipping/customers` Customers + edit address + order history
-- `/shipping/orders` Orders + customer popup + refund placeholder
-- `/shipping/batch` Batch print label URLs
-- `/shipping/analytics` Basic analytics
-- `/shipping/settings` Environment variable guide
+A clean, branded Next.js shipping portal powered by EasyPost.
 
 ## Vercel Environment Variables
-Required:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SHIPPING_PORTAL_PASSWORD`
-- `SHIPPING_SESSION_SECRET`
-- `SHIPCOM_ACCESS_TOKEN`
 
-Optional, useful if Ship.com gives you exact endpoint paths:
-- `SHIPCOM_API_BASE` defaults to `https://app.ship.com`
-- `SHIPCOM_CREATE_ORDER_PATH` defaults to `/public/orders`
-- `SHIPCOM_RATES_PATH` defaults to `/public/rates`
-- `SHIPCOM_PURCHASE_LABEL_PATH` defaults to `/public/purchase-label`
-- `SHIPCOM_REFUND_LABEL_PATH` defaults to `/public/refund-label`
+Required:
+
+```env
+EASYPOST_API_KEY=EZTK_or_EZAK_key_here
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SHIPPING_PORTAL_PASSWORD=your_login_password
+SHIPPING_SESSION_SECRET=long_random_secret
+```
+
+Required ship-from address:
+
+```env
+SHIP_FROM_NAME=Erendira's Boutique
+SHIP_FROM_STREET1=your_shipping_street
+SHIP_FROM_STREET2=
+SHIP_FROM_CITY=your_city
+SHIP_FROM_STATE=CA
+SHIP_FROM_ZIP=your_zip
+SHIP_FROM_PHONE=your_phone
+SHIP_FROM_EMAIL=your_email
+```
 
 ## Supabase
+
 Run `sql/setup.sql` in Supabase SQL Editor.
 
-## Branding
-Logo is in `public/logo.jpeg`.
+## Usage
 
-Font loader is already configured for:
-- `public/fonts/BringinboldNineties.woff2`
-- `public/fonts/MDNichrome-Bold.woff2`
+1. Log in at `/shipping/login`.
+2. Go to Create Label.
+3. Enter customer + package information.
+4. Save Order.
+5. Get Rates.
+6. Buy Label.
+7. Print the label from Orders.
 
-Add those font files locally before deploying if you have the font licenses/files. If not present, the portal falls back to system fonts.
+## Notes
 
-## Important note about Ship.com
-This app is structured around creating orders/labels inside the portal. Ship.com confirmed manually-created dashboard labels are not currently available through their API. Exact order/rate/refund endpoint paths may vary by account, so those paths are isolated in environment variables and `lib/shipcom.js`.
+Use EasyPost test key first. Labels purchased with a live key can charge postage.

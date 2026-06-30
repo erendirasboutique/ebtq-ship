@@ -1,4 +1,1 @@
-{
-  "installCommand": "npm install --no-audit --no-fund --legacy-peer-deps",
-  "buildCommand": "npm run build"
-}
+{"installCommand":"npm install --no-audit --no-fund --legacy-peer-deps"}
