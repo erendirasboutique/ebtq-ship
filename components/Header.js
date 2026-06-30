@@ -82,7 +82,7 @@ export default function Header() {
         <div className="brandCopy">
           <p className="eyebrow">Erendira&apos;s Boutique</p>
           <h1>Shipping Studio</h1>
-          <p>Welcome, {firstName}</p>
+          <p>Welcome, {firstName}! </p>
         </div>
       </div>
 
