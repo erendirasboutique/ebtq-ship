@@ -1,26 +1,20 @@
-# Erendira's Boutique Shipping Studio v8
+# Erendira Shipping Studio v9
 
-Tracking-portal style redesign for the internal EasyPost Shipping Studio.
+A stronger tracking-portal-style redesign for the internal EasyPost shipping portal.
 
-## Included
-- Google/Supabase login flow
-- Working sign out button
-- Dashboard, Create Label, Orders, Customers, Batch Print
-- EasyPost 4x6 labels
-- Cream/green/purple boutique styling
-- No heavy gradients or bouncing animations
-- Logo, favicon, and uploaded fonts included
+## What changed in v9
 
-## Deploy
+- Real sidebar layout instead of the old top navigation.
+- Cream boutique background with green divider lines and purple heading accents.
+- No heavy gradients, no bouncing animations, no hover movement.
+- Larger logo/sidebar presence inspired by the tracking portal.
+- Dashboard rebuilt with stronger hero, action cards, and recent shipment cards.
+- Create Label page restyled into clear boutique sections: customer, address, package weight, dimensions, options.
+- Orders, Customers, Batch Print cards restyled with flatter tracking-portal look.
+- Sign out behavior remains wired through Supabase + `/api/auth/logout`.
+
+## Setup
+
 1. Run `sql/setup.sql` in Supabase.
-2. Add Vercel environment variables:
-   - NEXT_PUBLIC_SUPABASE_URL
-   - NEXT_PUBLIC_SUPABASE_ANON_KEY
-   - SUPABASE_SERVICE_ROLE_KEY
-   - NEXT_PUBLIC_SITE_URL=https://ship.erendirasboutique.com
-   - EASYPOST_API_KEY
-   - SHIPPING_SESSION_SECRET
-   - SHIP_FROM_PHONE
-   - SHIP_FROM_EMAIL
-3. Upload folder contents to GitHub.
-4. Deploy on Vercel.
+2. Add Vercel env variables.
+3. Deploy to Vercel.

@@ -9,7 +9,6 @@ function money(n) {
 export default function Dashboard({ orders = [], customers = [] }) {
   const purchased = orders.filter(o => o.status === 'label_purchased');
   const batch = orders.filter(o => o.batch_selected && o.label_url);
-  const drafts = orders.filter(o => o.status === 'draft');
   const today = new Date().toISOString().slice(0, 10);
   const todayOrders = orders.filter(o => String(o.created_at || '').slice(0, 10) === today);
   const postage = purchased.reduce((sum, o) => sum + Number(o.postage_amount || 0), 0);
@@ -17,44 +16,53 @@ export default function Dashboard({ orders = [], customers = [] }) {
 
   return (
     <>
-      <section className="hero card">
+      <section className="hero boutiqueHero">
         <div>
-          <p className="eyebrow">Internal shipping workspace</p>
-          <h2>Today&apos;s shipping overview</h2>
-          <p className="muted">Create labels, manage customers, and batch print from one clean dashboard.</p>
+          <p className="eyebrow">Boutique shipping command center</p>
+          <h2>Manage labels with the same Erendira&apos;s Boutique look.</h2>
+          <p className="muted">Create 4×6 labels, manage customers, review shipments, and print batches without the old busy gradients.</p>
         </div>
-        <div className="actions">
-          <Link className="btn primary" href="/create-label">Create Label</Link>
-          <Link className="btn ghost" href="/batch-print">Batch Print</Link>
+        <div className="heroPanel">
+          <span>Today</span>
+          <b>{todayOrders.length}</b>
+          <small>shipments created</small>
         </div>
       </section>
 
-      <section className="grid">
-        <div className="stat"><b>{todayOrders.length}</b><span>Today&apos;s Shipments</span></div>
-        <div className="stat"><b>{customers.length}</b><span>Customers</span></div>
-        <div className="stat"><b>{purchased.length}</b><span>Labels Purchased</span></div>
-        <div className="stat"><b>{pending.length}</b><span>Pending Labels</span></div>
-        <div className="stat"><b>{batch.length}</b><span>Batch Queue</span></div>
-        <div className="stat"><b>{money(postage)}</b><span>Postage Spent</span></div>
+      <section className="grid statGrid">
+        <div className="stat"><span>Today&apos;s Shipments</span><b>{todayOrders.length}</b><small>Created today</small></div>
+        <div className="stat"><span>Customers</span><b>{customers.length}</b><small>Saved profiles</small></div>
+        <div className="stat"><span>Labels Purchased</span><b>{purchased.length}</b><small>All-time purchased</small></div>
+        <div className="stat"><span>Pending Labels</span><b>{pending.length}</b><small>Drafts/rates ready</small></div>
+        <div className="stat"><span>Batch Queue</span><b>{batch.length}</b><small>Ready to print</small></div>
+        <div className="stat"><span>Postage Spent</span><b>{money(postage)}</b><small>Purchased postage</small></div>
       </section>
 
-      <main className="layout">
-        <section className="card">
+      <main className="dashboardSplit">
+        <section className="card boutiqueCard actionPanel">
+          <p className="eyebrow">Start here</p>
           <h2>Quick Actions</h2>
-          <div className="quickGrid">
-            <Link className="mini-card" href="/create-label"><b>Create a label</b><span>Search or add customer</span></Link>
-            <Link className="mini-card" href="/orders"><b>View orders</b><span>Tracking and label details</span></Link>
-            <Link className="mini-card" href="/customers"><b>Customers</b><span>Edit addresses inline</span></Link>
-            <Link className="mini-card" href="/batch-print"><b>Batch print</b><span>Combine selected PDFs</span></Link>
+          <div className="quickGrid actionTiles">
+            <Link className="mini-card actionTile primaryTile" href="/create-label"><b>Create a label</b><span>Search customer, choose rate, buy 4×6 PDF</span></Link>
+            <Link className="mini-card actionTile" href="/batch-print"><b>Batch print</b><span>Combine selected labels into one PDF</span></Link>
+            <Link className="mini-card actionTile" href="/customers"><b>Customers</b><span>Import CSV, edit addresses, view contact info</span></Link>
+            <Link className="mini-card actionTile" href="/orders"><b>Orders</b><span>Review full shipment details and tracking</span></Link>
           </div>
         </section>
 
-        <section className="card">
-          <h2>Recent Shipments</h2>
-          <div className="list">
+        <section className="card boutiqueCard recentPanel">
+          <div className="row">
+            <div>
+              <p className="eyebrow">Latest activity</p>
+              <h2>Recent Shipments</h2>
+            </div>
+            <Link className="btn ghost" href="/orders">View all</Link>
+          </div>
+          <div className="list shipmentTimeline">
             {!orders.length && <div className="empty">No shipments yet.</div>}
-            {orders.slice(0, 6).map(o => (
-              <Link className="mini-card row" href="/orders" key={o.id}>
+            {orders.slice(0, 7).map(o => (
+              <Link className="mini-card shipmentLine" href="/orders" key={o.id}>
+                <span className="dot" />
                 <span><b>{o.customer_name || 'Customer'}</b><small>{o.carrier || 'Draft'} {o.mail_class || ''}</small></span>
                 <small>{o.status || 'draft'}</small>
               </Link>

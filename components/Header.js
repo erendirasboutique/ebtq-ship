@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { supabaseClient } from '@/lib/supabaseClient';
 
 function readUserCookie() {
@@ -11,7 +12,16 @@ function readUserCookie() {
   try { return JSON.parse(decodeURIComponent(raw.split('=').slice(1).join('='))); } catch { return null; }
 }
 
+const links = [
+  { href: '/', label: 'Dashboard', icon: '⌂' },
+  { href: '/create-label', label: 'Create Label', icon: '✦' },
+  { href: '/orders', label: 'Orders', icon: '□' },
+  { href: '/customers', label: 'Customers', icon: '◇' },
+  { href: '/batch-print', label: 'Batch Print', icon: '◐' }
+];
+
 export default function Header() {
+  const pathname = usePathname();
   const [user, setUser] = useState(null);
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
@@ -33,7 +43,7 @@ export default function Header() {
           email: u.email,
           name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0],
           avatar: u.user_metadata?.avatar_url || u.user_metadata?.picture || '',
-          role: cookieUser?.role || 'Staff'
+          role: cookieUser?.role || 'Shipping Team'
         });
       }
     }
@@ -66,38 +76,51 @@ export default function Header() {
   const firstName = (user?.name || 'Team').split(' ')[0];
 
   return (
-    <header className="topbar card">
-      <div className="brand">
+    <aside className="topbar sidebarCard">
+      <div className="sidebarBrand">
         <img src="/logo.jpeg" className="brand-mark" alt="Erendira's Boutique" />
-        <div>
+        <div className="brandCopy">
+          <p className="eyebrow">Erendira&apos;s Boutique</p>
           <h1>Shipping Studio</h1>
           <p>Welcome, {firstName}</p>
         </div>
       </div>
 
-      <nav className="nav">
-        <Link href="/">Dashboard</Link>
-        <Link href="/create-label">Create Label</Link>
-        <Link href="/orders">Orders</Link>
-        <Link href="/customers">Customers</Link>
-        <Link href="/batch-print">Batch Print</Link>
+      <div className="green-divider" />
+
+      <nav className="nav sidebarNav">
+        {links.map(link => {
+          const active = pathname === link.href;
+          return (
+            <Link key={link.href} href={link.href} className={active ? 'active' : ''}>
+              <span className="navIcon">{link.icon}</span>
+              <span>{link.label}</span>
+            </Link>
+          );
+        })}
       </nav>
 
-      <div className="profileWrap">
-        <button className="themeToggle" type="button" onClick={toggleDark}>{dark ? 'Light' : 'Dark'}</button>
-        <button className="profileButton" type="button" onClick={() => setOpen(v => !v)}>
+      <div className="sidebarNote">
+        <b>Quick tip</b>
+        <span>Purchased labels are saved automatically and can be printed from Batch Print.</span>
+      </div>
+
+      <div className="profileWrap sidebarProfile">
+        <button className="themeToggle" type="button" onClick={toggleDark}>{dark ? 'Light Mode' : 'Dark Mode'}</button>
+        <button className="profileButton profileWide" type="button" onClick={() => setOpen(v => !v)}>
           {user?.avatar ? <img src={user.avatar} alt={firstName} /> : <span>{firstName.charAt(0)}</span>}
+          <small>{user?.email || 'Signed in'}</small>
         </button>
         {open && (
           <div className="profileMenu card">
             <b>{user?.name || 'Team member'}</b>
             <small>{user?.email || ''}</small>
-            <small className="roleTag">{user?.role || 'Staff'}</small>
+            <small className="roleTag">{user?.role || 'Shipping Team'}</small>
             <hr />
             <button className="btn ghost" type="button" onClick={signOut}>Sign Out</button>
           </div>
         )}
       </div>
-    </header>
+    </aside>
   );
 }
