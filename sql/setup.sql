@@ -1,6 +1,9 @@
 create extension if not exists pgcrypto;
 
-create table if not exists shipping_customers (
+drop table if exists shipping_orders cascade;
+drop table if exists shipping_customers cascade;
+
+create table shipping_customers (
   id uuid primary key default gen_random_uuid(),
   import_key text unique,
   first_name text,
@@ -29,7 +32,7 @@ create table if not exists shipping_customers (
   updated_at timestamptz default now()
 );
 
-create table if not exists shipping_orders (
+create table shipping_orders (
   id uuid primary key default gen_random_uuid(),
   customer_id uuid references shipping_customers(id) on delete set null,
   customer_name text,
@@ -46,6 +49,10 @@ create table if not exists shipping_orders (
   parcel_width numeric default 10,
   parcel_height numeric default 10,
   parcel_weight numeric,
+  parcel_weight_lbs numeric default 1,
+  parcel_weight_oz numeric default 0,
+  signature_option text default 'NONE',
+  delivery_confirmation text,
   carrier text,
   mail_class text,
   easypost_shipment_id text,
@@ -65,6 +72,6 @@ create table if not exists shipping_orders (
   updated_at timestamptz default now()
 );
 
-create index if not exists shipping_customers_name_idx on shipping_customers(customer_name);
-create index if not exists shipping_orders_customer_id_idx on shipping_orders(customer_id);
-create index if not exists shipping_orders_created_at_idx on shipping_orders(created_at desc);
+create index shipping_customers_name_idx on shipping_customers(customer_name);
+create index shipping_orders_customer_id_idx on shipping_orders(customer_id);
+create index shipping_orders_created_at_idx on shipping_orders(created_at desc);
