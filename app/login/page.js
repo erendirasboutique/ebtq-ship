@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { supabaseClient } from '@/lib/supabaseClient';
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
   useEffect(() => {
