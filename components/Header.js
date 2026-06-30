@@ -1,1 +1,23 @@
-export default function Header(){return <header className="top glass"><div className="brand"><img src="/logo.jpeg" alt="Erendira's Boutique"/><div><h1>Shipping Studio</h1><p className="muted">EasyPost label creation + customer portal</p></div></div><nav className="nav"><a href="/">Dashboard</a><a href="/create-label">Create Label</a><a href="/customers">Customers</a><form action="/api/auth/logout" method="post"><button className="btn ghost">Logout</button></form></nav></header>}
+import Link from 'next/link';
+
+export default function Header() {
+  return (
+    <header className="topbar glass">
+      <div className="brand">
+        <img src="/logo.jpeg" className="brand-mark" alt="Erendira's Boutique" />
+        <div>
+          <h1>Shipping Studio</h1>
+          <p>Erendira&apos;s Boutique</p>
+        </div>
+      </div>
+
+      <nav className="nav">
+        <Link href="/">Dashboard</Link>
+        <Link href="/create-label">Create Label</Link>
+        <Link href="/orders">Orders</Link>
+        <Link href="/customers">Customers</Link>
+        <Link href="/batch-print">Batch Print</Link>
+      </nav>
+    </header>
+  );
+}
