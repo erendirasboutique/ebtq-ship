@@ -1,12 +1,15 @@
 import './globals.css';
-export const metadata = {
-  title: "Shipping Portal | Erendira's Boutique",
-  description: "EBTQ Shipping Portal",
 
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/icon.png",
-    apple: "/icon.png"
-  }
+export const metadata = {
+  title: "Erendira Shipping Studio",
+  description: "Internal shipping portal for Erendira's Boutique",
+  icons: { icon: '/icon.png', apple: '/icon.png' }
+};
+
+export const viewport = {
+  themeColor: '#f7f4ee'
+};
+
+export default function RootLayout({ children }) {
+  return <html lang="en"><body>{children}</body></html>;
 }
-export default function RootLayout({children}){return <html lang="en"><body>{children}</body></html>}

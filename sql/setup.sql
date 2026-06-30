@@ -135,3 +135,24 @@ alter table shipping_orders add column if not exists batch_selected boolean defa
 alter table shipping_orders add column if not exists notes text;
 alter table shipping_orders add column if not exists created_at timestamptz default now();
 alter table shipping_orders add column if not exists updated_at timestamptz default now();
+
+create table if not exists staff_users (
+  id uuid primary key default gen_random_uuid(),
+  email text unique not null,
+  name text,
+  role text default 'staff',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table staff_users add column if not exists email text;
+alter table staff_users add column if not exists name text;
+alter table staff_users add column if not exists role text default 'staff';
+alter table staff_users add column if not exists created_at timestamptz default now();
+alter table staff_users add column if not exists updated_at timestamptz default now();
+create unique index if not exists staff_users_email_idx on staff_users(email);
+
+-- Add your approved Google accounts after running setup.sql:
+-- insert into staff_users (email, name, role)
+-- values ('you@example.com', 'Your Name', 'admin')
+-- on conflict (email) do update set name = excluded.name, role = excluded.role;
