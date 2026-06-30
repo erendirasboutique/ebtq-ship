@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { isShippingAuthenticated } from '@/lib/auth';
-import { selectCustomers, upsertCustomer } from '@/lib/supabaseRest';
+import { selectCustomers, upsertCustomers } from '@/lib/supabaseRest';
 
 export async function GET() {
   const c = await cookies();
