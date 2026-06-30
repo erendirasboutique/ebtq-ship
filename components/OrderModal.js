@@ -1,47 +1,43 @@
 'use client';
-import { notificationText } from '@/lib/format';
 
-export default function OrderModal({ order, onClose, onRefund }) {
-  if (!order) return null;
+import { notificationText, fullAddress } from '@/lib/format';
 
-  async function copy() {
+export default function OrderDetailsModal({ order, onClose }) {
+  async function copyNotification() {
     await navigator.clipboard.writeText(notificationText(order));
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal glass order-modal" onClick={e => e.stopPropagation()}>
+    <div className="modal-backdrop">
+      <div className="modal glass">
         <button className="close" onClick={onClose}>×</button>
-        <div className="modal-hero">
-          <div>
-            <h2>{order.customer_name || 'Customer'}</h2>
-            <p className="muted">Order, label, customer, and tracking details</p>
-          </div>
-          <span className="modal-status">{order.status || 'draft'}</span>
+
+        <h2>{order.customer_name || 'Shipment Details'}</h2>
+
+        <div className="detail-grid">
+          <b>Address</b>
+          <span style={{ whiteSpace: 'pre-wrap' }}>{order.customer_address || fullAddress(order)}</span>
+
+          <b>Package</b>
+          <span>{order.parcel_length || 13} × {order.parcel_width || 10} × {order.parcel_height || 10} in · {order.parcel_weight_lb || 0} lb {order.parcel_weight_oz || 0} oz</span>
+
+          <b>Carrier</b>
+          <span>{order.carrier || '—'}</span>
+
+          <b>Service</b>
+          <span>{order.mail_class || '—'}</span>
+
+          <b>Tracking</b>
+          <span>{order.tracking_number || '—'}</span>
+
+          <b>Status</b>
+          <span>{order.status || 'draft'}</span>
         </div>
 
-        <div className="detail-cards">
-          <div><b>Email</b><span>{order.customer_email || '—'}</span></div>
-          <div><b>Phone</b><span>{order.customer_phone || '—'}</span></div>
-          <div className="wide"><b>Ship To</b><span className="address">{order.customer_address || '—'}</span></div>
-          <div><b>Carrier</b><span>{order.carrier || '—'}</span></div>
-          <div><b>Service</b><span>{order.mail_class || '—'}</span></div>
-          <div><b>Tracking</b><span>{order.tracking_number || '—'}</span></div>
-          <div><b>Postage</b><span>{order.postage_amount ? `$${order.postage_amount}` : '—'}</span></div>
-          <div><b>Shipment Date</b><span>{order.shipment_date || '—'}</span></div>
-          <div className="wide"><b>Notes</b><span>{order.notes || '—'}</span></div>
-        </div>
-
-        <div className="notification-preview">
-          <b>Notification Preview</b>
-          <pre>{notificationText(order)}</pre>
-        </div>
-
-        <div className="row modal-actions">
-          <button className="btn green" onClick={copy}>Copy Notification</button>
-          {order.label_url && <a className="btn ghost" href={order.label_url} target="_blank">Print Label</a>}
-          {order.tracking_url && <a className="btn primary" href={order.tracking_url} target="_blank">Track</a>}
-          {order.easypost_shipment_id && <button className="btn danger" onClick={() => onRefund(order)}>Refund/Void Label</button>}
+        <div className="actions">
+          {order.label_url && <a className="btn primary" href={order.label_url} target="_blank">Print Label</a>}
+          {order.tracking_url && <a className="btn ghost" href={order.tracking_url} target="_blank">Track</a>}
+          <button className="btn green" onClick={copyNotification}>Copy Notification</button>
         </div>
       </div>
     </div>
