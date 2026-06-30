@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: "Erendira's Boutique Shipping",
-  description: "Shipping Portal",
+  title: "Erendira Shipping Studio",
+  description: "Internal shipping portal for Erendira's Boutique",
   icons: { icon: '/icon.png', apple: '/icon.png' }
 };
 

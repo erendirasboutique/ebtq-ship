@@ -1,6 +1,6 @@
 {
-  "name": "ebtq-easypost-shipping-studio-v7",
-  "version": "7.0.0",
+  "name": "ebtq-shipping-studio-tracking-style-v8",
+  "version": "8.0.0",
   "private": true,
   "type": "module",
   "scripts": {
