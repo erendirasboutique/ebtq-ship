@@ -1,1 +1,28 @@
-export default function LoginPage({searchParams}){return <div className="login-wrap"><form className="login-card card" action="/api/auth/login" method="post"><img src="/logo.jpeg" alt="Erendira's Boutique"/><h1>Shipping Studio</h1><p className="muted">Admin login</p>{searchParams?.error&&<div className="notice error">Incorrect password.</div>}<label>Password<input name="password" type="password" required/></label><button className="btn primary" style={{marginTop:14,width:'100%'}}>Login</button></form></div>}
+'use client';
+
+import { supabaseClient } from '@/lib/supabaseClient';
+
+export default function LoginPage() {
+  async function loginWithGoogle() {
+    await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`
+      }
+    });
+  }
+
+  return (
+    <main className="login-wrap">
+      <section className="login-card glass">
+        <img src="/logo.jpeg" alt="Erendira's Boutique" />
+        <h1>Shipping Studio</h1>
+        <p className="muted">Sign in with your approved Google account.</p>
+
+        <button className="btn primary" onClick={loginWithGoogle}>
+          Continue with Google
+        </button>
+      </section>
+    </main>
+  );
+}
