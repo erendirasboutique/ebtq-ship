@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 function parseCSV(text) {
   const rows = [];
@@ -60,12 +61,17 @@ function formatAddress(c = {}) {
 }
 
 export default function CustomersDashboard({ initialCustomers = [] }) {
+  const [mounted, setMounted] = useState(false);
   const [customers, setCustomers] = useState(initialCustomers);
   const [q, setQ] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(null);
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const filtered = useMemo(() => {
     const t = q.toLowerCase().trim();
@@ -191,151 +197,118 @@ export default function CustomersDashboard({ initialCustomers = [] }) {
     }
   }
 
-  return (
-    <main className="card">
-      <h2>Customers</h2>
-      <p className="muted">Import your CSV, manually add customers, and edit addresses anytime.</p>
+  const modal = mounted && form ? createPortal(
+    <div className="modal-backdrop" onMouseDown={(e) => e.stopPropagation()}>
+      <form
+        className="modal"
+        onSubmit={saveCustomer}
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <button type="button" className="close" onClick={closeModal}>×</button>
 
-      {msg && <div className="notice">{msg}</div>}
+        <h2>{editingId === 'new' ? 'Add Customer' : 'Edit Customer'}</h2>
 
-      <div className="toolbar">
-        <input
-          value={q}
-          onChange={e => setQ(e.target.value)}
-          placeholder="Search customers..."
-        />
+        <div className="section-grid">
+          <label className="wide">
+            Name
+            <input value={form.customer_name || ''} onChange={e => updateField('customer_name', e.target.value)} required />
+          </label>
 
-        <label className="btn ghost" style={{ display: 'inline-flex' }}>
-          Import CSV
-          <input
-            type="file"
-            accept=".csv"
-            onChange={importFile}
-            style={{ display: 'none' }}
-            disabled={busy}
-          />
-        </label>
+          <label>
+            Email
+            <input value={form.email || ''} onChange={e => updateField('email', e.target.value)} />
+          </label>
 
-        <button className="btn primary" type="button" onClick={addCustomer}>
-          Add Customer
-        </button>
-      </div>
+          <label>
+            Phone
+            <input value={form.phone || ''} onChange={e => updateField('phone', e.target.value)} />
+          </label>
 
-      <div className="customer-grid">
-        {filtered.map(c => (
-          <button
-            key={c.id || c.import_key || `${c.customer_name}-${c.zip}`}
-            className="customer"
-            type="button"
-            onClick={() => openCustomer(c)}
-          >
-            <b>{c.customer_name}</b>
-            <br />
-            <span className="small">{c.email || c.phone || 'No contact'}</span>
-            <div className="address">{c.customer_address || formatAddress(c)}</div>
-          </button>
-        ))}
-      </div>
+          <label className="wide">
+            Address 1
+            <input value={form.address_line1 || ''} onChange={e => updateField('address_line1', e.target.value)} />
+          </label>
 
-   {form && (
-  <div className="modal-backdrop customer-modal-lock">
-    <form
-      className="modal"
-      onSubmit={saveCustomer}
-      onClick={(e) => e.stopPropagation()}
-      onMouseDown={(e) => e.stopPropagation()}
-    >
-            <button type="button" className="close" onClick={closeModal}>×</button>
+          <label className="wide">
+            Address 2
+            <input value={form.address_line2 || ''} onChange={e => updateField('address_line2', e.target.value)} />
+          </label>
 
-            <h2>{editingId === 'new' ? 'Add Customer' : 'Edit Customer'}</h2>
+          <label>
+            City
+            <input value={form.city || ''} onChange={e => updateField('city', e.target.value)} />
+          </label>
 
-            <div className="section-grid">
-              <label className="wide">
-                Name
-                <input
-                  value={form.customer_name || ''}
-                  onChange={e => updateField('customer_name', e.target.value)}
-                  required
-                />
-              </label>
+          <label>
+            State
+            <input value={form.state || ''} onChange={e => updateField('state', e.target.value)} />
+          </label>
 
-              <label>
-                Email
-                <input
-                  value={form.email || ''}
-                  onChange={e => updateField('email', e.target.value)}
-                />
-              </label>
+          <label>
+            ZIP
+            <input value={form.zip || ''} onChange={e => updateField('zip', e.target.value)} />
+          </label>
 
-              <label>
-                Phone
-                <input
-                  value={form.phone || ''}
-                  onChange={e => updateField('phone', e.target.value)}
-                />
-              </label>
-
-              <label className="wide">
-                Address 1
-                <input
-                  value={form.address_line1 || ''}
-                  onChange={e => updateField('address_line1', e.target.value)}
-                />
-              </label>
-
-              <label className="wide">
-                Address 2
-                <input
-                  value={form.address_line2 || ''}
-                  onChange={e => updateField('address_line2', e.target.value)}
-                />
-              </label>
-
-              <label>
-                City
-                <input
-                  value={form.city || ''}
-                  onChange={e => updateField('city', e.target.value)}
-                />
-              </label>
-
-              <label>
-                State
-                <input
-                  value={form.state || ''}
-                  onChange={e => updateField('state', e.target.value)}
-                />
-              </label>
-
-              <label>
-                ZIP
-                <input
-                  value={form.zip || ''}
-                  onChange={e => updateField('zip', e.target.value)}
-                />
-              </label>
-
-              <label>
-                Country
-                <input
-                  value={form.country || 'US'}
-                  onChange={e => updateField('country', e.target.value)}
-                />
-              </label>
-            </div>
-
-            <div className="actions" style={{ marginTop: 16 }}>
-              <button className="btn primary" disabled={busy}>
-                {busy ? 'Saving...' : 'Save Customer'}
-              </button>
-
-              <button className="btn ghost" type="button" onClick={closeModal}>
-                Cancel
-              </button>
-            </div>
-          </form>
+          <label>
+            Country
+            <input value={form.country || 'US'} onChange={e => updateField('country', e.target.value)} />
+          </label>
         </div>
-      )}
-    </main>
+
+        <div className="actions" style={{ marginTop: 16 }}>
+          <button className="btn primary" disabled={busy}>
+            {busy ? 'Saving...' : 'Save Customer'}
+          </button>
+
+          <button className="btn ghost" type="button" onClick={closeModal}>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>,
+    document.body
+  ) : null;
+
+  return (
+    <>
+      <main className="card">
+        <h2>Customers</h2>
+        <p className="muted">Import your CSV, manually add customers, and edit addresses anytime.</p>
+
+        {msg && <div className="notice">{msg}</div>}
+
+        <div className="toolbar">
+          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search customers..." />
+
+          <label className="btn ghost" style={{ display: 'inline-flex' }}>
+            Import CSV
+            <input type="file" accept=".csv" onChange={importFile} style={{ display: 'none' }} disabled={busy} />
+          </label>
+
+          <button className="btn primary" type="button" onClick={addCustomer}>
+            Add Customer
+          </button>
+        </div>
+
+        <div className="customer-grid">
+          {filtered.map(c => (
+            <button
+              key={c.id || c.import_key || `${c.customer_name}-${c.zip}`}
+              className="customer"
+              type="button"
+              onClick={() => openCustomer(c)}
+            >
+              <b>{c.customer_name}</b>
+              <br />
+              <span className="small">{c.email || c.phone || 'No contact'}</span>
+              <div className="address">{c.customer_address || formatAddress(c)}</div>
+            </button>
+          ))}
+        </div>
+      </main>
+
+      {modal}
+    </>
   );
 }
