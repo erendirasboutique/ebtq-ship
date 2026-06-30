@@ -1,6 +1,6 @@
 {
-  "name": "ebtq-easypost-shipping-studio-v5",
-  "version": "5.0.0",
+  "name": "ebtq-easypost-shipping-studio-v6",
+  "version": "6.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,5 @@
     "react-dom": "19.2.3",
     "pdf-lib": "^1.17.1"
   },
-  "engines": {
-    "node": "24.x"
-  }
+  "engines": {"node":"24.x"}
 }

@@ -1,3 +1,3 @@
 import { cookies } from 'next/headers';import { redirect } from 'next/navigation';import { isShippingAuthenticated } from '@/lib/auth';import { selectCustomers } from '@/lib/supabaseRest';import Header from '@/components/Header';import LabelStudio from '@/components/LabelStudio';
 export const dynamic='force-dynamic';
-export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/login');let customers=[];try{customers=await selectCustomers()}catch{}return <div className="page"><div className="shell"><Header/><LabelStudio initialCustomers={customers}/></div></div>}
+export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/login');let customers=[];try{customers=await selectCustomers()}catch(e){}return <div className="page"><div className="shell"><Header/><LabelStudio initialCustomers={customers}/></div></div>}
