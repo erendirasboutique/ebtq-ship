@@ -31,10 +31,3 @@ html.dark{--cream:#151310;--paper:#211d18;--soft:#2a241d;--soft2:#342b22;--line:
   pointer-events: auto !important;
 }
 
-.page:has(.modal-backdrop) .customer-grid,
-.page:has(.modal-backdrop) .customer,
-.page:has(.modal-backdrop) .toolbar,
-.page:has(.modal-backdrop) .nav,
-.page:has(.modal-backdrop) .topbar{
-  pointer-events: none !important;
-}
