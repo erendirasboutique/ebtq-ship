@@ -16,7 +16,7 @@ const empty = {
   parcel_length: 13,
   parcel_width: 10,
   parcel_height: 10,
-  parcel_weight_lbs: 1,
+  parcel_weight_lbs: 0,
   parcel_weight_oz: 0,
   parcel_weight: 16,
   signature_option: 'NONE',
@@ -119,7 +119,7 @@ export default function CreateLabel({ customers = [], initialOrders = [], loadEr
   }
 
   async function buy(rate) {
-    setMsg('Purchasing 4×6 label...');
+    setMsg('Purchasing Label 🏷️ ...');
     const res = await fetch('/api/orders/buy-label', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
