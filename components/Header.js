@@ -17,6 +17,7 @@ const links = [
   { href: '/create-label', label: 'Create Label', icon: '✦' },
   { href: '/orders', label: 'Orders', icon: '□' },
   { href: '/customers', label: 'Customers', icon: '◇' },
+  { href: '/returns', label: 'Returns', icon: '↺' },
   { href: '/batch-print', label: 'Batch Print', icon: '◐' }
 ];
 
@@ -82,7 +83,7 @@ export default function Header() {
         <div className="brandCopy">
           <p className="eyebrow">Erendira&apos;s Boutique</p>
           <h1>Shipping Studio</h1>
-          <p>Welcome, {firstName}! </p>
+          <p>Welcome, {firstName}</p>
         </div>
       </div>
 

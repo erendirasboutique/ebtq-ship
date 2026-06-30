@@ -160,3 +160,68 @@ create unique index if not exists staff_users_email_idx on staff_users(email);
 -- v10 refund/cancel label support
 alter table shipping_orders add column if not exists refund_status text;
 alter table shipping_orders add column if not exists refunded_at timestamptz;
+
+
+-- v11 Returns: access codes and return requests
+create table if not exists return_codes (
+  id uuid primary key default gen_random_uuid(),
+  code text unique not null,
+  customer_name text,
+  customer_email text,
+  customer_phone text,
+  original_order_id uuid,
+  original_tracking_number text,
+  note text,
+  is_used boolean default false,
+  used_at timestamptz,
+  created_at timestamptz default now()
+);
+
+create table if not exists return_requests (
+  id uuid primary key default gen_random_uuid(),
+  access_code text,
+  customer_name text,
+  customer_email text,
+  customer_phone text,
+  original_order_id uuid,
+  original_tracking_number text,
+  reason text,
+  comments text,
+  address_line1 text,
+  address_line2 text,
+  city text,
+  state text,
+  zip text,
+  country text default 'US',
+  return_address text,
+  parcel_length numeric default 13,
+  parcel_width numeric default 10,
+  parcel_height numeric default 10,
+  parcel_weight_lb numeric default 1,
+  parcel_weight_oz numeric default 0,
+  status text default 'requested',
+  easypost_shipment_id text,
+  return_tracking_number text,
+  return_tracking_url text,
+  return_label_url text,
+  return_carrier text,
+  return_service text,
+  return_postage_amount numeric,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table return_codes add column if not exists customer_phone text;
+alter table return_codes add column if not exists note text;
+alter table return_requests add column if not exists address_line1 text;
+alter table return_requests add column if not exists address_line2 text;
+alter table return_requests add column if not exists city text;
+alter table return_requests add column if not exists state text;
+alter table return_requests add column if not exists zip text;
+alter table return_requests add column if not exists country text default 'US';
+alter table return_requests add column if not exists parcel_length numeric default 13;
+alter table return_requests add column if not exists parcel_width numeric default 10;
+alter table return_requests add column if not exists parcel_height numeric default 10;
+alter table return_requests add column if not exists parcel_weight_lb numeric default 1;
+alter table return_requests add column if not exists parcel_weight_oz numeric default 0;
+alter table return_requests add column if not exists return_tracking_url text;

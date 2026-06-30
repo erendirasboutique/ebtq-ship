@@ -1,0 +1,3 @@
+import { cookies } from 'next/headers';import { redirect } from 'next/navigation';import { isShippingAuthenticated } from '@/lib/auth';import { selectReturns, selectReturnCodes } from '@/lib/supabaseRest';import Header from '@/components/Header';import ReturnsDashboard from '@/components/ReturnsDashboard';
+export const dynamic='force-dynamic';
+export default async function Page(){const c=await cookies();if(!isShippingAuthenticated(c))redirect('/login');let returns=[];let codes=[];try{returns=await selectReturns();codes=await selectReturnCodes();}catch(e){}return <div className="page"><div className="shell"><Header/><ReturnsDashboard initialReturns={returns} initialCodes={codes}/></div></div>}

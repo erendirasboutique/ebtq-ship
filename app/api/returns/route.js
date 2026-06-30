@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server';import { cookies } from 'next/headers';import { isShippingAuthenticated } from '@/lib/auth';import { selectReturns } from '@/lib/supabaseRest';
+export async function GET(){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});try{return NextResponse.json({returns:await selectReturns()})}catch(e){return NextResponse.json({error:e.message},{status:500})}}
