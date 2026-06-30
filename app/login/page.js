@@ -4,13 +4,13 @@ import { supabaseClient } from '@/lib/supabaseClient';
 
 export default function LoginPage() {
   async function loginWithGoogle() {
-    await supabaseClient.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-       redirectTo: "https://ship.erendirasboutique.com"
-      }
-    });
-  }
+  await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://ship.erendirasboutique.com'
+    }
+  });
+}
 
   return (
     <main className="login-wrap">
