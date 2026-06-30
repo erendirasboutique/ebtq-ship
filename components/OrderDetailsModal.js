@@ -114,11 +114,16 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
             </a>
           )}
 
-          {order.tracking_url && (
-            <a className="btn ghost" href={order.tracking_url} target="_blank">
-              Track
-            </a>
-          )}
+          {order.tracking_number && (
+  <a
+    className="btn ghost"
+    href={`https://track.erendirasboutique.com/?tracking=${encodeURIComponent(order.tracking_number)}`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Track Package
+  </a>
+)}
 
           <button className="btn green" type="button" onClick={copy}>
             Copy Notification
