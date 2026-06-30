@@ -7,7 +7,7 @@ export default function LoginPage() {
     await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
       options: {
-       redirectTo: "https://ship.erendirasboutique.com/auth/callback"
+       redirectTo: "https://ship.erendirasboutique.com"
       }
     });
   }
