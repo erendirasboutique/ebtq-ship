@@ -8,7 +8,7 @@ create table shipping_customers (
   import_key text unique,
   first_name text,
   last_name text,
-  customer_name text,
+  customer_name text not null,
   email text,
   phone text,
   customer_email text,
@@ -49,10 +49,9 @@ create table shipping_orders (
   parcel_width numeric default 10,
   parcel_height numeric default 10,
   parcel_weight numeric,
-  parcel_weight_lbs numeric default 1,
+  parcel_weight_lb numeric default 0,
   parcel_weight_oz numeric default 0,
-  signature_option text default 'NONE',
-  delivery_confirmation text,
+  signature_required boolean default false,
   carrier text,
   mail_class text,
   easypost_shipment_id text,
@@ -72,6 +71,6 @@ create table shipping_orders (
   updated_at timestamptz default now()
 );
 
-create index shipping_customers_name_idx on shipping_customers(customer_name);
 create index shipping_orders_customer_id_idx on shipping_orders(customer_id);
-create index shipping_orders_created_at_idx on shipping_orders(created_at desc);
+create index shipping_orders_status_idx on shipping_orders(status);
+create index shipping_customers_search_idx on shipping_customers(customer_name, email, phone, zip);

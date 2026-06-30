@@ -1,26 +1,3 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { isShippingAuthenticated } from '@/lib/auth';
-import { selectCustomers, upsertCustomers } from '@/lib/supabaseRest';
-
-export async function GET() {
-  const c = await cookies();
-  if (!isShippingAuthenticated(c)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  try {
-    return NextResponse.json({ customers: await selectCustomers() });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function POST(req) {
-  const c = await cookies();
-  if (!isShippingAuthenticated(c)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  try {
-    const customer = await req.json();
-    const saved = await upsertCustomers([customer])
-    return NextResponse.json({ customer: saved, customers: await selectCustomers() });
-  } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
+import { NextResponse } from 'next/server';import { cookies } from 'next/headers';import { isShippingAuthenticated } from '@/lib/auth';import { selectCustomers, upsertCustomer, updateCustomer } from '@/lib/supabaseRest';import { normalizeCustomer } from '@/lib/format';
+export async function GET(){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});return NextResponse.json({customers:await selectCustomers()})}
+export async function POST(req){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});try{const body=await req.json();let saved;if(body.id){saved=await updateCustomer(body.id,body)}else{saved=await upsertCustomer(normalizeCustomer(body))}return NextResponse.json({ok:true,saved,customers:await selectCustomers()})}catch(e){return NextResponse.json({error:e.message},{status:500})}}
