@@ -32,9 +32,13 @@ export default function LoginPage() {
         <h1>Shipping Studio</h1>
         <p className="muted">Sign in with your Erendira's Boutique Google account.</p>
 
-        <button className="btn primary" onClick={loginWithGoogle}>
-          Continue with Google
-        </button>
+        <button className="googleBtn" onClick={loginWithGoogle}>
+  <div className="googleIcon">
+    <FcGoogle size={20}/>
+  </div>
+
+  <span>Continue with Google</span>
+</button>
       </section>
     </main>
   );
