@@ -39,20 +39,3 @@
 
     border-radius:50%;
 }
-* {
-  animation: none !important;
-}
-
-.btn:hover,
-.card:hover,
-.order-card:hover,
-.customer-card:hover,
-.rate-card:hover {
-  transform: none !important;
-}
-
-html,
-body {
-  scroll-behavior: auto !important;
-  overflow-x: hidden;
-}
