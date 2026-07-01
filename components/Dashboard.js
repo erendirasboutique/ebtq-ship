@@ -18,9 +18,9 @@ export default function Dashboard({ orders = [], customers = [] }) {
     <>
       <section className="hero boutiqueHero">
         <div>
-          <p className="eyebrow">Boutique shipping command center</p>
-          <h2>Manage labels with the same Erendira&apos;s Boutique look.</h2>
-          <p className="muted">Create 4×6 labels, manage customers, review shipments, and print batches without the old busy gradients.</p>
+          <p className="eyebrow"></p>
+          <h2>Shipping Portal.</h2>
+          <p className="muted">Create 4×6 labels, manage customers, review shipments, and print batches.</p>
         </div>
         <div className="heroPanel">
           <span>Today</span>
