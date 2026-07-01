@@ -8,7 +8,7 @@ import {
 } from '@/lib/shippo';
 import {
   updateReturnRequest,
-  selectReturnRequests
+  selectReturns
 } from '@/lib/supabaseRest';
 
 export async function POST(req) {
