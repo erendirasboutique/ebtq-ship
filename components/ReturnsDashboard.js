@@ -92,7 +92,7 @@ export default function ReturnsDashboard({ initialReturns = [], initialCodes = [
           target="_blank"
           rel="noopener noreferrer"
         >
-          Half Page
+          Return Instructions: Half Page
         </a>
 
         <a
@@ -101,7 +101,7 @@ export default function ReturnsDashboard({ initialReturns = [], initialCodes = [
           target="_blank"
           rel="noopener noreferrer"
         >
-          Full Page
+          Return Instructions: Full Page
         </a>
       </div>
 
