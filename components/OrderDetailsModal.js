@@ -43,11 +43,8 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
       const res = await fetch('/api/orders/refund-label', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-  order: saved || order,
-  rateId: rate.object_id || rate.id,
-  rate
-});
+        body: JSON.stringify({ order })
+      });
 
       const data = await res.json();
 
@@ -154,3 +151,4 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
     document.body
   );
 }
+
