@@ -12,14 +12,14 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
 
   async function copy() { await navigator.clipboard.writeText(notificationText(order)); setMessage('Notification copied.'); }
   async function refundLabel() {
-    const ok = confirm('Request a refund/cancellation for this EasyPost label?');
+    const ok = confirm('Request a refund/cancellation for this Shippo label?');
     if (!ok) return;
     setBusy(true); setMessage('Requesting refund...');
     try { const res = await fetch('/api/orders/refund-label', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ order }) }); const data = await res.json(); if(!res.ok) throw new Error(data.error || 'Could not refund label'); setMessage('Refund requested.'); onUpdated?.(data.orders || []); }
     catch(e){ setMessage(e.message); } finally { setBusy(false); }
   }
   if (!mounted || !order) return null;
-  const canRefund = order.easypost_shipment_id && !['refunded','refund_requested'].includes(order.status);
+  const canRefund = order.shippo_transaction_id && !['refunded','refund_requested'].includes(order.status);
   const trackUrl = order.tracking_number ? `https://track.erendirasboutique.com/?tracking=${encodeURIComponent(order.tracking_number)}` : order.tracking_url;
   return createPortal(<div className="modal-backdrop"><div className="modal" onClick={e=>e.stopPropagation()} onMouseDown={e=>e.stopPropagation()}>
     <button className="close" type="button" onClick={onClose}>×</button>

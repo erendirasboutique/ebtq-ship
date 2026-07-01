@@ -225,3 +225,11 @@ alter table return_requests add column if not exists parcel_height numeric defau
 alter table return_requests add column if not exists parcel_weight_lb numeric default 1;
 alter table return_requests add column if not exists parcel_weight_oz numeric default 0;
 alter table return_requests add column if not exists return_tracking_url text;
+
+
+-- v13 Shippo migration support
+alter table shipping_orders add column if not exists shippo_shipment_id text;
+alter table shipping_orders add column if not exists shippo_transaction_id text;
+alter table return_requests add column if not exists shippo_shipment_id text;
+alter table return_requests add column if not exists shippo_transaction_id text;
+alter table return_requests add column if not exists return_postage_currency text default 'USD';
