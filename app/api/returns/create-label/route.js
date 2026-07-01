@@ -1,13 +1,69 @@
-import { NextResponse } from 'next/server';import { cookies } from 'next/headers';import { isShippingAuthenticated } from '@/lib/auth';import { createEasyPostReturnShipment, buyEasyPostLabel } from '@/lib/easypost';import { updateReturnRequest, selectReturns } from '@/lib/supabaseRest';
-function normalize(shipment={}){const uspsRates = (shipment.rates || []).filter(
-  r => String(r.carrier || '').toUpperCase() === 'USPS'
-);
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { isShippingAuthenticated } from '@/lib/auth';
+import {
+  createShippoReturnShipment,
+  cheapestUspsRate,
+  buyShippoLabel
+} from '@/lib/shippo';
+import {
+  updateReturnRequest,
+  selectReturnRequests
+} from '@/lib/supabaseRest';
 
-if (!uspsRates.length) {
-  throw new Error('No USPS return rates were returned by EasyPost.');
+export async function POST(req) {
+  const c = await cookies();
+
+  if (!isShippingAuthenticated(c)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { returnRequest } = await req.json();
+
+    if (!returnRequest?.id) {
+      return NextResponse.json({ error: 'Missing return request id' }, { status: 400 });
+    }
+
+    const shipment = await createShippoReturnShipment(returnRequest);
+    const rate = cheapestUspsRate(shipment.rates || []);
+
+    if (!rate?.object_id) {
+      return NextResponse.json(
+        { error: 'No USPS return rates were returned by Shippo.' },
+        { status: 400 }
+      );
+    }
+
+    const transaction = await buyShippoLabel(rate.object_id);
+
+    if (transaction.status && transaction.status !== 'SUCCESS') {
+      throw new Error(transaction.messages?.[0]?.text || `Shippo transaction failed: ${transaction.status}`);
+    }
+
+    await updateReturnRequest(returnRequest.id, {
+      status: 'label_created',
+      shippo_shipment_id: shipment.object_id,
+      shippo_transaction_id: transaction.object_id,
+      return_carrier: rate.provider || 'USPS',
+      return_service: rate.servicelevel?.name || '',
+      return_postage_amount: rate.amount || null,
+      return_postage_currency: rate.currency || 'USD',
+      return_tracking_number: transaction.tracking_number || '',
+      return_tracking_url: transaction.tracking_url_provider || '',
+      return_label_url: transaction.label_url || '',
+      updated_at: new Date().toISOString()
+    });
+
+    const returns = await selectReturnRequests();
+
+    return NextResponse.json({
+      ok: true,
+      shipment,
+      transaction,
+      returns
+    });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }
-
-const rate = uspsRates.sort(
-  (a, b) => Number(a.rate) - Number(b.rate)
-)[0] || {};const tracker=shipment.tracker||{};const label=shipment.postage_label||{};return {easypost_shipment_id:shipment.id||'',return_tracking_number:tracker.tracking_code||shipment.tracking_code||'',return_tracking_url:tracker.public_url||'',return_label_url:label.label_url||'',return_carrier:rate.carrier||'',return_service:rate.service||'',return_postage_amount:rate.rate||'',status:'label_created'};}
-export async function POST(req){const c=await cookies();if(!isShippingAuthenticated(c))return NextResponse.json({error:'Unauthorized'},{status:401});try{const {returnRequest,rateId}=await req.json();if(!returnRequest?.id)return NextResponse.json({error:'Missing return request'},{status:400});let shipment;if(returnRequest.easypost_shipment_id&&rateId){shipment=await buyEasyPostLabel(returnRequest.easypost_shipment_id,rateId)}else{const created=await createEasyPostReturnShipment(returnRequest);if(rateId){shipment=await buyEasyPostLabel(created.id,rateId)}else{const cheapest=(created.rates||[]).sort((a,b)=>Number(a.rate)-Number(b.rate))[0];if(!cheapest)return NextResponse.json({error:'No return rates found'},{status:400});shipment=await buyEasyPostLabel(created.id,cheapest.id)}}const patch=normalize(shipment);await updateReturnRequest(returnRequest.id,patch);return NextResponse.json({ok:true,shipment,returns:await selectReturns()})}catch(e){return NextResponse.json({error:e.message},{status:500})}}
