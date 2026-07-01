@@ -26,7 +26,8 @@ create table if not exists shipping_customers (
   notes text,
   imported_at timestamptz,
   created_at timestamptz default now(),
-  updated_at timestamptz default now()
+  updated_at timestamptz default now(),
+  label_purchased_at timestamptz
 );
 
 create table if not exists shipping_orders (
@@ -135,6 +136,7 @@ alter table shipping_orders add column if not exists batch_selected boolean defa
 alter table shipping_orders add column if not exists notes text;
 alter table shipping_orders add column if not exists created_at timestamptz default now();
 alter table shipping_orders add column if not exists updated_at timestamptz default now();
+alter table shipping_orders add column if not exists label_purchased_at timestamptz;
 
 create table if not exists staff_users (
   id uuid primary key default gen_random_uuid(),

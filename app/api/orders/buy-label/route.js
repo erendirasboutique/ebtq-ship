@@ -20,9 +20,7 @@ export async function POST(req) {
     const tx = await buyShippoLabel(rateId);
 
     if (tx.status && tx.status !== 'SUCCESS') {
-      throw new Error(
-        tx.messages?.[0]?.text || `Shippo transaction failed: ${tx.status}`
-      );
+      throw new Error(tx.messages?.[0]?.text || `Shippo transaction failed: ${tx.status}`);
     }
 
     const patch = normalizeShippoTransaction(tx);
@@ -32,6 +30,7 @@ export async function POST(req) {
       tx.rate?.provider ||
       rate?.provider ||
       rate?.carrier ||
+      rate?.raw?.provider ||
       order.carrier ||
       '';
 
@@ -40,7 +39,8 @@ export async function POST(req) {
       tx.rate?.servicelevel?.name ||
       rate?.servicelevel?.name ||
       rate?.service ||
-      rate?.mail_class ||
+      rate?.raw?.servicelevel?.name ||
+      rate?.raw?.servicelevel?.token ||
       order.mail_class ||
       '';
 
@@ -49,6 +49,7 @@ export async function POST(req) {
       tx.rate?.amount ||
       rate?.amount ||
       rate?.rate ||
+      rate?.raw?.amount ||
       order.postage_amount ||
       '';
 
@@ -56,6 +57,7 @@ export async function POST(req) {
       patch.postage_currency ||
       tx.rate?.currency ||
       rate?.currency ||
+      rate?.raw?.currency ||
       order.postage_currency ||
       'USD';
 
@@ -69,11 +71,7 @@ export async function POST(req) {
       updated_at: new Date().toISOString()
     });
 
-    return NextResponse.json({
-      ok: true,
-      order: saved,
-      transaction: tx
-    });
+    return NextResponse.json({ ok: true, order: saved, transaction: tx });
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 });
   }

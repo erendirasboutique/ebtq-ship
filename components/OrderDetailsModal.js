@@ -47,10 +47,7 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Could not refund label');
-      }
+      if (!res.ok) throw new Error(data.error || 'Could not refund label');
 
       setMessage('Refund requested.');
       onUpdated?.(data.orders || []);
@@ -101,11 +98,7 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
           <span>{order.mail_class || '—'}</span>
 
           <b>Postage</b>
-          <span>
-            {order.postage_amount
-              ? `$${order.postage_amount} ${order.postage_currency || 'USD'}`
-              : '—'}
-          </span>
+          <span>{order.postage_amount ? `$${order.postage_amount} ${order.postage_currency || 'USD'}` : '—'}</span>
 
           <b>Created</b>
           <span>{formatDateTime(order.label_purchased_at || order.created_at)}</span>
@@ -136,9 +129,7 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
             </a>
           )}
 
-          <button className="btn green" type="button" onClick={copy}>
-            Copy Notification
-          </button>
+          <button className="btn green" type="button" onClick={copy}>Copy Notification</button>
 
           {canRefund && (
             <button className="btn danger" type="button" onClick={refundLabel} disabled={busy}>
@@ -151,4 +142,3 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
     document.body
   );
 }
-
