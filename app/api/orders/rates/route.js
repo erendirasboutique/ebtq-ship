@@ -14,6 +14,7 @@ export async function POST(req) {
 
     const shipment = await createShippoShipment(order);
     const rates = normalizeShippoRates(shipment.rates || []);
+    console.log('SHIPPO RATES RAW:', JSON.stringify(shipment.rates, null, 2));
 
     const saved = await updateOrder(order.id, {
       shippo_shipment_id: shipment.object_id,
