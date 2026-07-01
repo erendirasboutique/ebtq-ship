@@ -55,7 +55,7 @@ export async function POST(req) {
       updated_at: new Date().toISOString()
     });
 
-    const returns = await selectReturnRequests();
+    const returns = await selectReturns();
 
     return NextResponse.json({
       ok: true,
