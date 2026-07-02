@@ -31,7 +31,44 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
     await navigator.clipboard.writeText(notificationText(order));
     setMessage('Notification copied.');
   }
+async function deleteOrder() {
+  const ok = confirm(
+    `Delete the order for "${order.customer_name}"?\n\nThis cannot be undone.`
+  );
 
+  if (!ok) return;
+
+  setBusy(true);
+  setMessage('Deleting order...');
+
+  try {
+    const res = await fetch('/api/orders/delete', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: order.id
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Could not delete order.');
+    }
+
+    setMessage('Order deleted.');
+
+    onUpdated?.(data.orders || []);
+
+    onClose();
+  } catch (e) {
+    setMessage(e.message);
+  } finally {
+    setBusy(false);
+  }
+}
   async function refundLabel() {
     const ok = confirm('Request a refund/cancellation for this Shippo label?');
     if (!ok) return;
@@ -128,7 +165,14 @@ export default function OrderDetailsModal({ order, onClose, onUpdated }) {
               Track Package
             </a>
           )}
-
+<button
+  className="btn danger"
+  type="button"
+  onClick={deleteOrder}
+  disabled={busy}
+>
+  Delete Order
+</button>
           <button className="btn green" type="button" onClick={copy}>Copy Notification</button>
 
           {canRefund && (
