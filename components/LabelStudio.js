@@ -42,11 +42,11 @@ function rateCurrency(rate = {}) {
   return rate.currency || rate.raw?.currency || 'USD';
 }
 
-export default function LabelStudio({ initialCustomers = [] }) {
+export default function LabelStudio({initialCustomers=[], initialOrder=null}){
   const [customers] = useState(initialCustomers);
   const [q, setQ] = useState('');
-  const [order, setOrder] = useState(empty);
-  const [saved, setSaved] = useState(null);
+  const[order,setOrder]=useState(initialOrder || empty);
+const[saved,setSaved]=useState(initialOrder || null);
   const [rates, setRates] = useState([]);
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
