@@ -165,6 +165,15 @@ async function deleteOrder() {
               Track Package
             </a>
           )}
+{!order.label_url && (
+  <a
+    className="btn primary"
+    href={`/create-label?order=${encodeURIComponent(order.id)}`}
+  >
+    Continue Label
+  </a>
+)}
+  
 <button
   className="btn danger"
   type="button"
